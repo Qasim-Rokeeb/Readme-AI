@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Copy, Download, Loader2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ReadmePreviewProps {
   readme: string;
@@ -88,7 +90,9 @@ export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onBack, is
                 </CardHeader>
                 <CardContent>
                     <div className="prose prose-sm dark:prose-invert max-w-none bg-muted rounded-md p-4 h-[40vh] overflow-y-auto">
-                        <pre className="whitespace-pre-wrap font-sans">{readme}</pre>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {readme}
+                        </ReactMarkdown>
                     </div>
                 </CardContent>
             </Card>

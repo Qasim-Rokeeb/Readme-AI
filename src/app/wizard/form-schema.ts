@@ -7,6 +7,7 @@ export const readmeFormSchema = z.object({
   projectDescription: z.string().min(10, {
     message: 'Description must be at least 10 characters.',
   }),
+  projectUrl: z.string().url().optional().or(z.literal('')),
   techStack: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: 'You have to select at least one item.',
   }),
@@ -14,6 +15,7 @@ export const readmeFormSchema = z.object({
     message: 'Installation method must be at least 3 characters.',
   }),
   license: z.string(),
+  appType: z.enum(['frontend', 'backend', 'fullstack']),
   challengeDay: z.number().optional(),
   challengeTitle: z.string().optional(),
   challengeLink: z.string().url().optional().or(z.literal('')),

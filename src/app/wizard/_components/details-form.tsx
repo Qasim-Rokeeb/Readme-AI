@@ -10,9 +10,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Loader2, Wand2 } from 'lucide-react';
+import { ArrowLeft, GitBranchPlus, Globe, Loader2, Wand2 } from 'lucide-react';
 import type { ProjectType } from '../types';
 import { readmeFormSchema } from '../form-schema';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useState } from 'react';
 
 interface DetailsFormProps {
   projectType: ProjectType;
@@ -21,15 +23,26 @@ interface DetailsFormProps {
   isLoading: boolean;
 }
 
-const techOptions = ['React', 'Next.js', 'Vue', 'Svelte', 'Node.js', 'Python', 'Go', 'Rust', 'Docker', 'Kubernetes', 'AWS', 'GCP', 'Azure', 'Tailwind CSS'];
+type AppType = 'frontend' | 'backend' | 'fullstack';
+
+const techOptions = {
+  frontend: ['React', 'Next.js', 'Vue', 'Svelte', 'Angular', 'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'Tailwind CSS', 'Bootstrap', 'jQuery'],
+  backend: ['Node.js', 'Python', 'Go', 'Rust', 'Java', 'PHP', 'Ruby', 'Express.js', 'Django', 'Flask', 'Spring Boot'],
+  database: ['MongoDB', 'PostgreSQL', 'MySQL', 'SQLite', 'Redis', 'Firebase'],
+  devops: ['Docker', 'Kubernetes', 'AWS', 'GCP', 'Azure', 'Jenkins', 'Terraform'],
+};
+
 const licenseOptions = ['MIT', 'Apache-2.0', 'GPL-3.0', 'BSD-3-Clause', 'Unlicense', 'Other'];
 
 export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: DetailsFormProps) {
+  const [appType, setAppType] = useState<AppType>('fullstack');
+
   const form = useForm<z.infer<typeof readmeFormSchema>>({
     resolver: zodResolver(readmeFormSchema),
     defaultValues: {
       projectName: '',
       projectDescription: '',
+      projectUrl: '',
       installationMethod: 'npm install',
       techStack: [],
       license: 'MIT',
@@ -37,8 +50,29 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
       challengeTitle: '',
       challengeLink: '',
       challengeNotes: '',
+      appType: 'fullstack',
     },
   });
+
+  const handleAppTypeChange = (value: AppType) => {
+    setAppType(value);
+    form.setValue('appType', value);
+  };
+  
+  const getTechOptions = () => {
+    switch (appType) {
+      case 'frontend':
+        return { Frontend: techOptions.frontend };
+      case 'backend':
+        return { Backend: techOptions.backend, Database: techOptions.database, DevOps: techOptions.devops };
+      case 'fullstack':
+        return { Frontend: techOptions.frontend, Backend: techOptions.backend, Database: techOptions.database, DevOps: techOptions.devops };
+      default:
+        return {};
+    }
+  };
+
+  const visibleTechOptions = getTechOptions();
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -78,6 +112,21 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                     <FormLabel>Project Description</FormLabel>
                     <FormControl>
                       <Textarea placeholder="Describe what your project does, who it's for, and why it's useful." {...field} rows={4} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="projectUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      <GitBranchPlus className="mr-2 h-4 w-4" /> Project URL (Optional)
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://github.com/user/repo" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,6 +206,42 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
               <CardDescription>Specify the technologies and setup for your project.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+               <FormField
+                control={form.control}
+                name="appType"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>Application Type</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={handleAppTypeChange}
+                        defaultValue={field.value}
+                        className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4"
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="frontend" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Frontend</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="backend" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Backend</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="fullstack" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Fullstack</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="techStack"
@@ -164,30 +249,37 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                   <FormItem>
                     <FormLabel>Tech Stack</FormLabel>
                     <FormDescription>Select the main technologies used in your project.</FormDescription>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                      {techOptions.map((item) => (
-                        <FormField
-                          key={item}
-                          control={form.control}
-                          name="techStack"
-                          render={({ field }) => {
-                            return (
-                              <FormItem key={item} className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...(field.value || []), item])
-                                        : field.onChange(field.value?.filter((value) => value !== item));
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">{item}</FormLabel>
-                              </FormItem>
-                            );
-                          }}
-                        />
+                    <div className="space-y-4">
+                      {Object.entries(visibleTechOptions).map(([category, techs]) => (
+                        <div key={category}>
+                          <h4 className="font-medium mb-2">{category}</h4>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            {techs.map((item) => (
+                              <FormField
+                                key={item}
+                                control={form.control}
+                                name="techStack"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem key={item} className="flex flex-row items-start space-x-3 space-y-0">
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(item)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([...(field.value || []), item])
+                                              : field.onChange(field.value?.filter((value) => value !== item));
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">{item}</FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                     <FormMessage />
