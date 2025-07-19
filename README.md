@@ -23,7 +23,7 @@
 
 ## 🚀 Quick Start
 
-1. **Go** → [readme-ai.app](https://readme-ai.app)  
+1. **Go** → [readme-creator-app](https://readme-creator-app.vercel.app)  
 2. **Choose** a project type (Standard / Challenge / Library / DevOps)  
 3. **Fill** the wizard (or paste a repo URL)  
 4. **Preview** & tweak  
@@ -53,7 +53,7 @@ Produces:
 
 | Light Mode | Dark Mode |
 |---|---|
-| ![light](https://readme-ai.app/assets/light.png) | ![dark](https://readme-ai.app/assets/dark.png) |
+| ![light](https://readme-creator-app.vercel.app/assets/light.png) | ![dark](https://readme-creator-app.vercel.app/assets/dark.png) |
 
 ---
 
