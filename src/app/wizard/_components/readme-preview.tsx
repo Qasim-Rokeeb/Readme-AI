@@ -59,7 +59,7 @@ export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onRegenera
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <Card className="h-full">
+          <Card className="h-full shadow-md">
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle>Editor</CardTitle>
@@ -86,13 +86,13 @@ export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onRegenera
         </div>
         
         <div className="space-y-6">
-            <Card>
+            <Card className="shadow-md">
                 <CardHeader>
                     <CardTitle>Preview</CardTitle>
                     <CardDescription>Rendered output</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="prose prose-sm dark:prose-invert max-w-none bg-muted rounded-md p-4 h-[40vh] overflow-y-auto">
+                    <div className="prose dark:prose-invert max-w-none bg-muted rounded-md p-4 h-[40vh] overflow-y-auto">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {readme}
                         </ReactMarkdown>
@@ -100,7 +100,7 @@ export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onRegenera
                 </CardContent>
             </Card>
 
-            <Card>
+            <Card className="shadow-md">
                 <CardHeader>
                     <CardTitle>AI Actions</CardTitle>
                     <CardDescription>Improve sections with AI.</CardDescription>
@@ -111,7 +111,7 @@ export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onRegenera
                             key={index}
                             variant="ghost"
                             size="sm"
-                            className="w-full justify-start"
+                            className="w-full justify-start text-accent-foreground hover:text-accent-foreground"
                             onClick={() => onRegenerate(section.substring(3))}
                             disabled={isLoading || isRegeneratingAll}
                         >

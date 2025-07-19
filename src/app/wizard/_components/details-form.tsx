@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, GitBranchPlus, Loader2, Wand2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Wand2 } from 'lucide-react';
 import type { ProjectType } from '../types';
 import { readmeFormSchema } from '../form-schema';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -26,6 +26,14 @@ interface DetailsFormProps {
 }
 
 type AppType = 'frontend' | 'backend' | 'fullstack';
+
+const GitBranchIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+    <path fillRule="evenodd" d="M10 2.5a.5.5 0 0 1 .5.5v1.516a2.5 2.5 0 0 1 2.493 2.493h1.516a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1.516a2.5 2.5 0 0 1-4.986 0H6.5a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1.516A2.5 2.5 0 0 1 10.5 4.016V2.5a.5.5 0 0 1-.5-.5zM8.5 7a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm1.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+    <path d="M5 12.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
+  </svg>
+);
+
 
 const techOptions: Record<string, {name: string, icon: React.ReactNode}[]> = {
   frontend: [
@@ -89,7 +97,7 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
       installationMethod: 'npm install',
       techStack: [],
       license: 'MIT',
-      includeIcons: false,
+      includeIcons: true,
       challengeDay: projectType === 'challenge' ? 1 : undefined,
       challengeTitle: '',
       challengeLink: '',
@@ -167,7 +175,8 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center">
-                      <GitBranchPlus className="mr-2 h-4 w-4" /> Project URL (Optional)
+                      <GitBranchIcon /> 
+                      <span className="ml-2">Project URL (Optional)</span>
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="https://github.com/user/repo" {...field} />
@@ -278,7 +287,7 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                           <FormControl>
                             <RadioGroupItem value="fullstack" />
                           </FormControl>
-                          <FormLabel className="font-normal">Fullstack</FormLabel>
+                          <FormLabel className="font-normal">Full-stack</FormLabel>
                         </FormItem>
                       </RadioGroup>
                     </FormControl>
@@ -305,7 +314,7 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                                 name="techStack"
                                 render={({ field }) => {
                                   return (
-                                    <FormItem key={item.name} className="flex flex-row items-center space-x-3 space-y-0">
+                                    <FormItem key={item.name} className="flex flex-row items-start space-x-3 space-y-0 hover:scale-105 hover:shadow-lg transition-transform p-2 rounded-md">
                                       <FormControl>
                                         <Checkbox
                                           checked={field.value?.includes(item.name)}
@@ -316,7 +325,7 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                                           }}
                                         />
                                       </FormControl>
-                                       <FormLabel className="font-normal flex items-center gap-2">
+                                       <FormLabel className="font-normal flex items-center gap-2 cursor-pointer">
                                         <div className="w-4 h-4">{item.icon}</div>
                                         {item.name}
                                       </FormLabel>
@@ -340,7 +349,7 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                   <FormItem>
                     <FormLabel>Installation Command</FormLabel>
                     <FormControl>
-                      <Input placeholder="npm install && npm start" {...field} />
+                      <Input placeholder="npm install && npm start" {...field} className="font-code"/>
                     </FormControl>
                     <FormDescription>Provide the command(s) to install dependencies and run the project.</FormDescription>
                     <FormMessage />
@@ -374,7 +383,7 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                   control={form.control}
                   name="includeIcons"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm mt-2 sm:mt-0">
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 mt-2 sm:mt-0">
                       <div className="space-y-0.5">
                         <FormLabel>Include Icons?</FormLabel>
                         <FormDescription>

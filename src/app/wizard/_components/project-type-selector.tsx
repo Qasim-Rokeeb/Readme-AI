@@ -9,10 +9,10 @@ interface ProjectTypeSelectorProps {
 }
 
 const projectTypes = [
-  { type: 'standard' as ProjectType, title: 'Standard Project', icon: Package },
-  { type: 'challenge' as ProjectType, title: 'Challenge / Daily Project', icon: Trophy },
-  { type: 'library' as ProjectType, title: 'Library / Package', icon: Library },
-  { type: 'devops' as ProjectType, title: 'DevOps / Script', icon: Container },
+  { type: 'standard' as ProjectType, title: 'Standard Project', icon: Package, description: 'For general-purpose applications and websites.' },
+  { type: 'challenge' as ProjectType, title: 'Challenge / Daily Project', icon: Trophy, description: 'For #100DaysOfCode, LeetCode, and daily coding challenges.' },
+  { type: 'library' as ProjectType, title: 'Library / Package', icon: Library, description: 'For reusable libraries, packages, or frameworks.' },
+  { type: 'devops' as ProjectType, title: 'DevOps / Script', icon: Container, description: 'For infrastructure, CI/CD scripts, and automation tools.' },
 ];
 
 export function ProjectTypeSelector({ onSelect }: ProjectTypeSelectorProps) {
@@ -25,7 +25,7 @@ export function ProjectTypeSelector({ onSelect }: ProjectTypeSelectorProps) {
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projectTypes.map(({ type, title, icon: Icon }) => (
+        {projectTypes.map(({ type, title, icon: Icon, description }) => (
           <Card
             key={type}
             onClick={() => onSelect(type)}
@@ -34,15 +34,14 @@ export function ProjectTypeSelector({ onSelect }: ProjectTypeSelectorProps) {
             onKeyDown={(e) => e.key === 'Enter' && onSelect(type)}
           >
             <CardHeader className="flex flex-row items-center gap-4">
-              <Icon className="w-8 h-8 text-primary" />
+              <div className="p-3 bg-primary/10 rounded-md">
+                <Icon className="w-6 h-6 text-primary" />
+              </div>
               <CardTitle>{title}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                {type === 'standard' && 'For general-purpose applications and websites.'}
-                {type === 'challenge' && 'For #100DaysOfCode, LeetCode solutions, and daily coding challenges.'}
-                {type === 'library' && 'For reusable libraries, packages, or frameworks.'}
-                {type === 'devops' && 'For infrastructure as code, CI/CD scripts, and automation tools.'}
+                {description}
               </p>
             </CardContent>
           </Card>
