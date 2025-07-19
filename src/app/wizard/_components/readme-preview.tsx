@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,11 +14,13 @@ interface ReadmePreviewProps {
   readme: string;
   onReadmeChange: (newReadme: string) => void;
   onRegenerate: (sectionHeading: string) => void;
+  onRegenerateAll: () => void;
   onBack: () => void;
   isLoading: boolean;
+  isRegeneratingAll: boolean;
 }
 
-export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onBack, isLoading }: ReadmePreviewProps) {
+export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onRegenerateAll, onBack, isLoading, isRegeneratingAll }: ReadmePreviewProps) {
   const { toast } = useToast();
 
   const handleCopy = () => {
@@ -110,12 +113,22 @@ export function ReadmePreview({ readme, onReadmeChange, onRegenerate, onBack, is
                             size="sm"
                             className="w-full justify-start"
                             onClick={() => onRegenerate(section.substring(3))}
-                            disabled={isLoading}
+                            disabled={isLoading || isRegeneratingAll}
                         >
-                            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4 text-accent" />}
+                            {(isLoading && !isRegeneratingAll) ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4 text-accent" />}
                             Regenerate "{section.substring(3)}"
                         </Button>
                     )) : <p className="text-sm text-muted-foreground">No sections found to regenerate.</p>}
+                     <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start"
+                        onClick={onRegenerateAll}
+                        disabled={isRegeneratingAll || isLoading}
+                    >
+                        {isRegeneratingAll ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4 text-accent" />}
+                        Regenerate All
+                    </Button>
                 </CardContent>
             </Card>
         </div>

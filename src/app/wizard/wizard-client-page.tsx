@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -20,6 +21,8 @@ export default function WizardClientPage() {
   const [projectType, setProjectType] = useState<ProjectType | null>(null);
   const [readmeContent, setReadmeContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRegeneratingAll, setIsRegeneratingAll] = useState(false);
+  const [formValues, setFormValues] = useState<z.infer<typeof readmeFormSchema> | null>(null);
   const { toast } = useToast();
 
   const handleSelectProjectType = (type: ProjectType) => {
@@ -29,6 +32,7 @@ export default function WizardClientPage() {
 
   const handleFormSubmit = async (values: z.infer<typeof readmeFormSchema>) => {
     setIsLoading(true);
+    setFormValues(values);
     try {
       const input = {
         projectName: values.projectName,
@@ -58,6 +62,50 @@ export default function WizardClientPage() {
       setIsLoading(false);
     }
   };
+
+  const handleRegenerateAll = async () => {
+    if (!formValues) {
+      toast({
+        title: 'Error',
+        description: 'Form data is not available to regenerate the README.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setIsRegeneratingAll(true);
+    try {
+       const input = {
+        projectName: formValues.projectName,
+        projectDescription: formValues.projectDescription,
+        projectUrl: formValues.projectUrl,
+        techStack: formValues.techStack,
+        installationMethod: formValues.installationMethod,
+        license: formValues.license,
+        includeIcons: formValues.includeIcons,
+        template: 'Classic', // Default template
+        challengeDay: formValues.challengeDay,
+        challengeTitle: formValues.challengeTitle,
+        challengeLink: formValues.challengeLink,
+        challengeNotes: formValues.challengeNotes,
+      };
+      const result = await generateReadme(input);
+      setReadmeContent(result.readmeContent);
+      toast({
+        title: 'README Regenerated',
+        description: 'The entire README file has been updated.',
+      });
+    } catch (error) {
+       console.error('Error regenerating README:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to regenerate README. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsRegeneratingAll(false);
+    }
+  };
+
 
   const handleRegenerateSection = async (sectionHeading: string) => {
     setIsLoading(true);
@@ -116,8 +164,10 @@ export default function WizardClientPage() {
           readme={readmeContent}
           onReadmeChange={setReadmeContent}
           onRegenerate={handleRegenerateSection}
+          onRegenerateAll={handleRegenerateAll}
           onBack={handleBack}
           isLoading={isLoading}
+          isRegeneratingAll={isRegeneratingAll}
         />
       )}
     </div>
