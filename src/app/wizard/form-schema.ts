@@ -16,6 +16,7 @@ export const readmeFormSchema = z.object({
   }),
   license: z.string(),
   appType: z.enum(['frontend', 'backend', 'fullstack']),
+  includeIcons: z.boolean().default(false),
   challengeDay: z.number().optional(),
   challengeTitle: z.string().optional(),
   challengeLink: z.string().url().optional().or(z.literal('')),

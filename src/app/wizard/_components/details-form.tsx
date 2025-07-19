@@ -10,11 +10,12 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, GitBranchPlus, Globe, Loader2, Wand2 } from 'lucide-react';
+import { ArrowLeft, GitBranchPlus, Loader2, Wand2 } from 'lucide-react';
 import type { ProjectType } from '../types';
 import { readmeFormSchema } from '../form-schema';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useState } from 'react';
+import { Switch } from '@/components/ui/switch';
 
 interface DetailsFormProps {
   projectType: ProjectType;
@@ -46,6 +47,7 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
       installationMethod: 'npm install',
       techStack: [],
       license: 'MIT',
+      includeIcons: false,
       challengeDay: projectType === 'challenge' ? 1 : undefined,
       challengeTitle: '',
       challengeLink: '',
@@ -300,28 +302,50 @@ export function DetailsForm({ projectType, onSubmit, onBack, isLoading }: Detail
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="license"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>License</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="license"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>License</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a license" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {licenseOptions.map(license => (
+                            <SelectItem key={license} value={license}>{license}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="includeIcons"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm mt-2 sm:mt-0">
+                      <div className="space-y-0.5">
+                        <FormLabel>Include Icons?</FormLabel>
+                        <FormDescription>
+                          Add 🔗 and 🌐 to links.
+                        </FormDescription>
+                      </div>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a license" />
-                        </SelectTrigger>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        {licenseOptions.map(license => (
-                          <SelectItem key={license} value={license}>{license}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </CardContent>
           </Card>
           

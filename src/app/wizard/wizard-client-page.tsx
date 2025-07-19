@@ -33,11 +33,11 @@ export default function WizardClientPage() {
       const input = {
         projectName: values.projectName,
         projectDescription: values.projectDescription,
-        // projectUrl is now part of the form, but not in GenerateReadmeInput yet.
-        // I will add it to the prompt later if needed. For now, it's collected.
+        projectUrl: values.projectUrl,
         techStack: values.techStack,
         installationMethod: values.installationMethod,
         license: values.license,
+        includeIcons: values.includeIcons,
         template: 'Classic', // Default template
         challengeDay: values.challengeDay,
         challengeTitle: values.challengeTitle,

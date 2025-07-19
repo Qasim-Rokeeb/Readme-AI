@@ -22,6 +22,8 @@ const GenerateReadmeInputSchema = z.object({
   challengeLink: z.string().optional().describe('A link to the coding challenge, if applicable.'),
   challengeNotes: z.string().optional().describe('Any notes or reflections on the coding challenge.'),
   template: z.string().describe('The template to use for generating the README.'),
+  includeIcons: z.boolean().optional().describe('Whether or not to include icons in the README.'),
+  projectUrl: z.string().optional().describe('The URL of the project, like a GitHub repository.'),
 });
 
 export type GenerateReadmeInput = z.infer<typeof GenerateReadmeInputSchema>;
@@ -47,12 +49,19 @@ Description: {{{projectDescription}}}
 Tech Stack: {{#each techStack}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
 Installation: {{{installationMethod}}}
 License: {{{license}}}
+{{#if projectUrl}}
+Project URL: {{{projectUrl}}}
+{{/if}}
 
 {{#if challengeDay}}
 Challenge Day: {{{challengeDay}}}
 Challenge Title: {{{challengeTitle}}}
 Challenge Link: {{{challengeLink}}}
 Challenge Notes: {{{challengeNotes}}}
+{{/if}}
+
+{{#if includeIcons}}
+Use icons like 🔗 and 🌐 where appropriate, for example next to links.
 {{/if}}
 
 Template: {{{template}}}
