@@ -26,7 +26,7 @@ export default function Home() {
         </div>
       </main>
       <footer className="py-4 text-center text-muted-foreground text-sm">
-        <p>Built by deveopers, for developers.</p>
+        <p>Built by developers, for developers.</p>
       </footer>
     </div>
   );
