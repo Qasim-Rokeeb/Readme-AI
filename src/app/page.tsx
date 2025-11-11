@@ -15,7 +15,7 @@ export default function Home() {
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight mb-4">
-            Create beautiful READMEs in one breath.
+            Create beautiful READMEs in one breath, easy with Ai.
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Turn your project details into publication-ready documentation. A guided, GitHub-native experience to make docs delightful.
@@ -26,7 +26,7 @@ export default function Home() {
         </div>
       </main>
       <footer className="py-4 text-center text-muted-foreground text-sm">
-        <p>Built by developers, for developers.</p>
+        <p>Built by developers, for developers.💖</p>
       </footer>
     </div>
   );
